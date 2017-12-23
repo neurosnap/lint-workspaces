@@ -1,0 +1,7 @@
+*.swp
+*.log
+.DS_Store
+.cache
+*.pyc
+*.egg-info
+.python-version
