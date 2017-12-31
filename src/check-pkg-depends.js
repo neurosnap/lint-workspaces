@@ -25,24 +25,24 @@ const defaultOutput = {
 
 function* run(dirs, { scope }) {
   const topLevelDirs = yield dirs.map(
-    (dir) => task(getTopLevelDir, cleanGlob(dir)),
+    (dir) => task(getTopLevelDir, cleanGlob(dir))
   );
   const files = yield flatten(topLevelDirs)
     .filter(Boolean)
     .map(
-      ({ file, pkg }) => task(walk, file, pkg),
+      ({ file, pkg }) => task(walk, file, pkg)
     );
   const jsFiles = flatten(files).filter(
-    ({ file }) => /\.js$/.test(file),
+    ({ file }) => /\.js$/.test(file)
   );
   const trees = yield jsFiles.map(
-    (fileObj) => task(parse, fileObj),
+    (fileObj) => task(parse, fileObj)
   );
   const flatTrees = flatten(trees);
 
   // Lint rules
   const dependsErrors = flatTrees.map(
-    (props) => ensureDependencyInPackageJson({ ...props, scope }),
+    (props) => ensureDependencyInPackageJson({ ...props, scope })
   );
 
   const state = new Set();
