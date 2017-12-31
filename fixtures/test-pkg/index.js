@@ -1,2 +1,2 @@
-import * as thread from '@trove/thread';
+import * as thread from '@tester/thread';
 console.log(thread);

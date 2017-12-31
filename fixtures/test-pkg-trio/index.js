@@ -1,2 +1,2 @@
-import wow from '@trove/thread';
+import wow from '@tester/thread';
 console.log(wow);

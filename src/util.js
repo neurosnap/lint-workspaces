@@ -1,7 +1,6 @@
 const fs = require('fs');
 const chalk = require('chalk');
-const debug = require('debug')('trove-scripts');
-
+const debug = require('debug')('lint-workspaces');
 
 function ensureDir(dir) {
   return new Promise((resolve, reject) => {

@@ -2,7 +2,7 @@
   "name": "test-pkg-trio",
   "version": "1.0.0",
   "dependencies": {
-    "@trove/something": "1.0.0",
-    "@trove/thread": "1.0.0"
+    "@tester/something": "1.0.0",
+    "@tester/thread": "1.0.0"
   }
 }

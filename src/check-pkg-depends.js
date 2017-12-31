@@ -8,7 +8,7 @@ const { read, readdir, task, stat, cleanGlob, flatten, verbose } = require('./ut
 const {
   SUCCESS,
   DEPENDENCY_MISSING_IN_PACKAGE_JSON,
-  NOT_TROVE_IMPORT,
+  NOT_SCOPE_IMPORT,
   UNNECESSARY_PACKAGE_DEPENDENCY,
 } = require('./constants');
 
@@ -23,7 +23,7 @@ const defaultOutput = {
   pkg: defaultPkg,
 };
 
-function* run(dirs) {
+function* run(dirs, { scope }) {
   const topLevelDirs = yield dirs.map(
     (dir) => task(getTopLevelDir, cleanGlob(dir)),
   );
@@ -42,12 +42,12 @@ function* run(dirs) {
 
   // Lint rules
   const dependsErrors = flatTrees.map(
-    (props) => ensureDependencyInPackageJson(props),
+    (props) => ensureDependencyInPackageJson({ ...props, scope }),
   );
 
   const state = new Set();
   flatTrees.forEach(
-    (props) => ensureOnlyNecessaryDependencyInPackageJson({ ...props, state }),
+    (props) => ensureOnlyNecessaryDependencyInPackageJson({ ...props, state, scope }),
   );
   const unnecessaryErrors = detectUnnecessaryPackagesInPackageJson(state);
 
@@ -112,13 +112,14 @@ function* parse({ file, pkg }) {
 }
 
 function ensureOnlyNecessaryDependencyInPackageJson(
-  { ast, pkg, state },
+  { ast, pkg, state, scope },
 ) {
+  const importRe = new RegExp('^' + scope);
   /* eslint-disable no-param-reassign */
   const visitors = {
     ImportDeclaration: (node, curState) => {
       const importName = node.source.value;
-      if (!(/^@trove/.test(importName))) return;
+      if (!(importRe.test(importName))) return;
       state.add(importName);
       if (!state.hasOwnProperty(pkg.file)) {
         curState[pkg.file] = { pkg, actual: new Set() };
@@ -134,7 +135,7 @@ function ensureOnlyNecessaryDependencyInPackageJson(
       const importName = node.arguments[0].value;
       if (!importName) return;
 
-      if (!(/^@trove/.test(importName))) return;
+      if (!(importRe.test(importName))) return;
       if (!state.hasOwnProperty(pkg.file)) {
         curState[pkg.file] = { pkg, actual: new Set() };
       }
@@ -174,11 +175,11 @@ function detectUnnecessaryPackagesInPackageJson(state) {
   }, []);
 }
 
-function ensureDependencyInPackageJson({ ast, file, pkg }) {
+function ensureDependencyInPackageJson({ ast, file, pkg, scope }) {
   const visitors = {
     ImportDeclaration: (node, state) => {
       const importName = node.source.value;
-      const result = checkDependency(importName, file, pkg);
+      const result = checkDependency(importName, file, pkg, scope);
       if (result.type === DEPENDENCY_MISSING_IN_PACKAGE_JSON) {
         state.push(result);
       }
@@ -191,7 +192,7 @@ function ensureDependencyInPackageJson({ ast, file, pkg }) {
       const importName = node.arguments[0].value;
       if (!importName) return;
 
-      const result = checkDependency(importName, file, pkg);
+      const result = checkDependency(importName, file, pkg, scope);
       if (result.type === DEPENDENCY_MISSING_IN_PACKAGE_JSON) {
         state.push(result);
       }
@@ -203,8 +204,12 @@ function ensureDependencyInPackageJson({ ast, file, pkg }) {
   return errors;
 }
 
-function checkDependency(importName, file, pkg = defaultPkg) {
-  if (!(/^@trove/.test(importName))) return { ...defaultOutput, type: NOT_TROVE_IMPORT };
+function checkDependency(importName, file, pkg = defaultPkg, scope) {
+  const importRe = new RegExp('^' + scope);
+  if (!(importRe.test(importName))) return {
+    ...defaultOutput,
+    type: NOT_SCOPE_IMPORT,
+  };
 
   const err = {
     type: DEPENDENCY_MISSING_IN_PACKAGE_JSON,
