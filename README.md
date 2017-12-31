@@ -1,4 +1,4 @@
-# lint-workspaces
+# lint-workspaces [![Build Status](https://travis-ci.org/neurosnap/lint-workspaces.svg?branch=master)](https://travis-ci.org/neurosnap/lint-workspaces)
 
 Simple linter to keep internal dependencies up-to-date for yarn workspaces
 
