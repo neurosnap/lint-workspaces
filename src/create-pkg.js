@@ -5,14 +5,6 @@
 const path = require('path');
 const { readdir, revStat, task, write, ensureDir, log, error } = require('./util');
 
-const opkg = require('../package.json');
-const workspaces = opkg.workspaces;
-const scope = '@tester';
-
-workspaces.forEach((pkgFolder) => {
-  task(run, pkgFolder, { scope });
-});
-
 function* run(dir, options) {
   try {
     const files = yield readdir(dir);
@@ -60,3 +52,5 @@ function createPkgJsonContent(scope, name) {
 
   return JSON.stringify(json, null, 2);
 }
+
+module.exports = run;

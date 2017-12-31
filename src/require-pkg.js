@@ -10,14 +10,10 @@ const {
   logPretty,
   error,
 } = require('./util');
-const pkg = require('../package.json');
-
-const workspaces = pkg.workspaces;
-
-logPretty('Checking that all packages have a `package.json` ...');
-task(run, workspaces);
 
 function* run(dirs) {
+  logPretty('Checking that all packages have a `package.json` ...');
+
   const results = yield dirs.map((pkgFolder) => {
     const dir = cleanGlob(pkgFolder);
     return task(processDir, dir);
@@ -60,3 +56,5 @@ function* processDir(dir) {
 function getNotFoundErrors(result) {
   return result.type === 'NotFound';
 }
+
+module.exports = run;
