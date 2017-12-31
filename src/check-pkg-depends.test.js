@@ -17,7 +17,7 @@ test('when there is a dependency missing from package.json', (t) => {
   results.then((actual) => {
     t.equal(actual.length, 2);
     const first = actual.find(
-      (err) => err.type === DEPENDENCY_MISSING_IN_PACKAGE_JSON,
+      (err) => err.type === DEPENDENCY_MISSING_IN_PACKAGE_JSON
     );
     t.equal(first.importName, '@tester/thread', 'should return an error');
     t.end();
@@ -31,7 +31,7 @@ test('when there is an unnecessary dependency in a package.json', (t) => {
   results.then((actual) => {
     t.equal(actual.length, 2);
     const first = actual.find(
-      (err) => err.type === UNNECESSARY_PACKAGE_DEPENDENCY,
+      (err) => err.type === UNNECESSARY_PACKAGE_DEPENDENCY
     );
     t.equal(first.importName, '@tester/something', 'should return an error');
     t.end();
