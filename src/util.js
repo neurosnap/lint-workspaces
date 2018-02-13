@@ -82,10 +82,10 @@ function stat(dir) {
   });
 }
 
-function revStat(dir) {
+function revStat(dir, force) {
   return new Promise((resolve, reject) => {
     fs.stat(dir, (err) => {
-      if (err) {
+      if (err || force) {
         return resolve(err);
       }
 

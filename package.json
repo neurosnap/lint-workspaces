@@ -6,6 +6,9 @@
   "scripts": {
     "test": "tape src/**/*.test.js"
   },
+  "bin": {
+    "lint-workspaces": "index.js"
+  },
   "author": "Eric Bower",
   "license": "MIT",
   "devDependencies": {

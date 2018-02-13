@@ -3,7 +3,7 @@
  * that have not been created yet.
  */
 const path = require('path');
-const { readdir, revStat, task, write, ensureDir, log, error } = require('./util');
+const { read, readdir, revStat, task, write, ensureDir, log, error } = require('./util');
 
 function* run(dir, options) {
   try {
@@ -26,20 +26,50 @@ function* run(dir, options) {
 function* createPkgJsonFile(pkgJson, name, options) {
   const createPkgFileFn = options.createPkgFileFn || createPkgJsonContent;
   const scope = options.scope || '';
+  const version = options.version || '1.0.0';
+  const template = options.template;
+  const force = options.force || false;
+
+  let pkgContent;
+  if (template) {
+    pkgContent = yield task(createPkgFileFromTemplate, {
+      template,
+      scope,
+      name,
+      version,
+    });
+  } else {
+    pkgContent = createPkgFileFn({ scope, name, version });
+  }
 
   try {
-    yield revStat(pkgJson);
-    const res = yield write(pkgJson, createPkgFileFn(scope, name));
+    yield revStat(pkgJson, force);
+    const res = yield write(pkgJson, pkgContent);
     log(res);
   } catch (err) {
     error(err);
   }
 }
 
-function createPkgJsonContent(scope, name) {
+function* createPkgFileFromTemplate({ template, scope, name, version }) {
+  let data;
+  try {
+    data = yield read(template);
+  } catch (err) {
+    error(err);
+    return;
+  }
+
+  return data.toString()
+    .replace('${scope}', scope)
+    .replace('${name}', name)
+    .replace('${version}', version);
+}
+
+function createPkgJsonContent({ scope, name, version }) {
   const json = {
     name: `${scope}/${name}`,
-    version: '1.0.0',
+    version: `${version}`,
     description: '',
     main: 'index.js',
     scripts: {
