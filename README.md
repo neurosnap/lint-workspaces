@@ -39,14 +39,14 @@ lint-workspaces depends --scope="@tester" --fix
 
 ## Options
 
-* `dir`: directory to use, defaults to "."
+* `dir`: directory to use, default "."
 * `workspaces`: list of workspaces to look for packages e.g. "./src/packages"
-* `scope`: npm scope for packages, e.g. "@lint-workspaces/packageA"
+* `scope`: npm scope for packages, e.g. "@lint-workspaces"
 * `name`: name of package, e.g. "packageA"
-* `version`: `package.version` to use when creating package.json file
-* `template`: location of template file for package.json
-* `force`: destructively destroys and rebuilds package.json for each package
-* `fix`: fixes any dependencies issues
+* `version`: `package.version` to use when creating package.json file, e.g. "1.0.0"
+* `template`: location of template file for package.json e.g. "./package\_template.json"
+* `force`: destructively destroys and rebuilds package.json for each package, default `false`
+* `fix`: fixes any dependencies issues, default `false`
 
 ## Example of template package.json file
 
