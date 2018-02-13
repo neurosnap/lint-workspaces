@@ -53,7 +53,7 @@ lint-workspaces depends --scope="@tester" --fix
 ```json
 {
   "name": "${scope}/${name}",
-  "version": "${version}"
+  "version": "${version}",
   "description": "",
   "main": "index.js",
   "scripts": {
