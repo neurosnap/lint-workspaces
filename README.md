@@ -52,16 +52,16 @@ lint-workspaces depends --scope="@tester" --fix
 
 ```json
 {
-  "name": "${scope}/${name}",                                                                                                                    │  express:router urlencodedParser  : /user/38f51d86-6780-4bda-9f38-c8eabf034c31 +0ms
-  "version": "${version}",                                                                                                                       │  body-parser:urlencoded skip empty body +0ms
-  "description": "",                                                                                                                             │  express:router jsonParser  : /user/38f51d86-6780-4bda-9f38-c8eabf034c31 +0ms
-  "main": "index.js",                                                                                                                            │  body-parser:json skip empty body +0ms
-  "scripts": {                                                                                                                                   │  express:router serveStatic  : /user/38f51d86-6780-4bda-9f38-c8eabf034c31 +0ms
-    "test": 'echo "Error: no test specified" && exit 1'                                                                                          │  send stat "/Users/erock/dev/youhood/public/user/38f51d86-6780-4bda-9f38-c8eabf034c31" +0ms
-  },                                                                                                                                             │  express:router router  : /user/38f51d86-6780-4bda-9f38-c8eabf034c31 +0ms
-  "author": "Eric Bower",                                                                                                                        │  express:router dispatching GET /user/38f51d86-6780-4bda-9f38-c8eabf034c31 +0ms
-  "license": "MIT",                                                                                                                              │  express:router trim prefix (/user) from url /user/38f51d86-6780-4bda-9f38-c8eabf034c31 +0ms
-  "dependencies": {}                                                                                                                             │  express:router router /user : /user/38f51d86-6780-4bda-9f38-c8eabf034c31 +0ms
+  "name": "${scope}/${name}",
+  "version": "${version}"
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": 'echo "Error: no test specified" && exit 1'
+  },
+  "author": "Eric Bower",
+  "license": "MIT",
+  "dependencies": {}
 }
 ```
 
